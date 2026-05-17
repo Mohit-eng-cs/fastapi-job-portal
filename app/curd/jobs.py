@@ -1,5 +1,4 @@
 import math
-
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
 from app.models.job import Job 

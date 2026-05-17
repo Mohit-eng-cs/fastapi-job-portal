@@ -1,6 +1,6 @@
 from pydantic import BaseModel
-from models import Application
 from datetime import datetime
+from typing import Optional
 
 class ApplicationBase(BaseModel):
     job_id: int
@@ -16,3 +16,15 @@ class ApplicationResponse(BaseModel):
     status: str
     resume_url: str | None
     created_at: datetime 
+
+class Apphist(BaseModel):
+    application_id:int
+    old_status:str
+    new_status:str
+    changed_by:int
+
+class Apphistcreate(Apphist):
+    pass
+
+
+

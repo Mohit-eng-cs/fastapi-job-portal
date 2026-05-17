@@ -10,7 +10,6 @@ from app.core.dependencies import UserRole
 
 def create_job_service(db: Session, data: JobCreate,current_user:User):
    
-
     is_admin=current_user.role==UserRole.ADMIN
     is_recrut=current_user.role==UserRole.RECRUITER
     
@@ -25,7 +24,7 @@ def create_job_service(db: Session, data: JobCreate,current_user:User):
     if existing:
         raise HTTPException(status_code=400, detail="Job with this title already exists for this company")
     last_added = find_last(db)
-    next_job_id = (last_added.id+ 1) if last_added else 1
+    next_job_id = (last_added.id+ 1) if last_added else 1    
 
     job_code = Jobs_code(data.title, next_job_id)
 
@@ -70,7 +69,6 @@ def update_job_service(db:Session,data:JobUpdate,id:int,current_user:User)->Job:
     return updated_job
 
 
-
 def delete_job_service(
     db: Session,
     job_id: int,
@@ -88,8 +86,6 @@ def delete_job_service(
         raise NotAdminError()
 
     del_job(db, job)
-
-
 
 def get_jobs(db:Session,page:int,limit:int,location: str | None = None,
     company: str | None = None,
