@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.db.sessions import engine
 from app import models
-from app.api import Job_routes,user_routes,resume_route
+from app.api import Job_routes,user_routes,resume_route,application_routes
 import os
 
 
@@ -38,3 +38,4 @@ def root():
 app.include_router(Job_routes.router)
 app.include_router(user_routes.router)
 app.include_router(resume_route.router)
+app.include_router(application_routes.router)

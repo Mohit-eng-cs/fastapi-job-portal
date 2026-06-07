@@ -7,7 +7,7 @@ from sqlalchemy import TIMESTAMP, Column, Date, ForeignKey, Index , Integer,Stri
 class Application(Base):
     __tablename__ = "applications"
     id = Column(Integer, primary_key=True, index=True)
-    candidate_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    candidate_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"),nullable=False)
     job_id = Column(Integer, ForeignKey("jobs.id", ondelete="CASCADE"), nullable=False)
     status = Column(String, nullable=False, server_default="created")
     resume_url = Column(Text, nullable=True)

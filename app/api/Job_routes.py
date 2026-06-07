@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query ,Path
 from sqlalchemy.orm import Session
 from app.db.sessions import SessionLocal,get_db
 from app.schemas.user import *
@@ -45,3 +45,7 @@ def update_job(updte:JobUpdate,jobs_id:int,db:Session=Depends(get_db),user:User=
 @router.post("/delete/${job_id}")
 def delete_job(jobs_id:int,db:Session=Depends(get_db),user:User=Depends(require_role([UserRole.RECRUITER,UserRole.ADMIN]))):
     return delete_job_service(db,jobs_id,user)
+
+
+
+

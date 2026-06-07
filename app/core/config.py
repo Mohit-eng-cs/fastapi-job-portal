@@ -12,8 +12,3 @@ class Settings(BaseSettings):
         env_file = ".env"
 
 settings = Settings()
-
-
-
-
-"postgresql://postgres:Admin2009@localhost:5432/fastapi"
