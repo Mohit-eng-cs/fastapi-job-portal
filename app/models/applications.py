@@ -9,11 +9,10 @@ class Application(Base):
     id = Column(Integer, primary_key=True, index=True)
     candidate_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     job_id = Column(Integer, ForeignKey("jobs.id", ondelete="CASCADE"), nullable=False)
-    status = Column(String, nullable=False, server_default="applied")
+    status = Column(String, nullable=False, server_default="created")
     resume_url = Column(Text, nullable=True)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())
     updated_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())
-
     candidate = relationship("User", backref="applications")
     job = relationship("Job", back_populates="applications")
 
