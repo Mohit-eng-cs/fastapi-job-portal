@@ -11,7 +11,10 @@ def create_application(db:Session,data:ApplicationCreate):
     return ap_data
 
 def get_application_by_candidate(db:Session,candidate_id:int,job_id:int):
-    db.query(Application).filter(Application.candidate_id==candidate_id,Application.job_id==job_id).first()
+    return (
+        db.query(Application).filter(Application.candidate_id == candidate_id, Application.job == job_id).first
+    )
+
 
 def create_status_history(db:Session,data:Apphistcreate):
     app_hist_data=ApplicationStatusHistory(**data)

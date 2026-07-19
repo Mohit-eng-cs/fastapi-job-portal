@@ -34,10 +34,11 @@ def create_job_service(db: Session, data: JobCreate,current_user:User):
         description=data.description,
         id=next_job_id,
         job_code=job_code,
-        Min_sal = data.Min_sal,
-        Max_sal = data.Max_sal,
-        location = data.location,
-        posted_by = current_user.id
+        Min_sal=data.Min_sal,
+        Max_sal=data.Max_sal,
+        location=data.location,
+        skills_required=data.skills_required,
+        posted_by=current_user.id
     )
 
     try:
@@ -51,22 +52,6 @@ def create_job_service(db: Session, data: JobCreate,current_user:User):
         raise HTTPException(status_code=500,detail="Database error occured")
 
     return payload
-
-
-def update_job_service(db:Session,data:JobUpdate,id:int,current_user:User)->Job:
-    job = get_job(db,id)
-    if not job:
-        raise JobNotFoundError
-    
-    is_admin=current_user.role==UserRole.ADMIN
-    is_recrut=current_user.role==UserRole.RECRUITER
-    is_createdby = current_user.id == Job.posted_by
-
-    if not (is_recrut or is_admin or is_createdby):
-        raise NotAdminError
-    
-    updated_job = update_job(db,id,data)
-    return updated_job
 
 
 def delete_job_service(
@@ -124,3 +109,33 @@ def get_jobs(db:Session,page:int,limit:int,location: str | None = None,
         "total_pages": total_pages,
         "data": jobs,
     }   
+
+
+# ---------- Service layer (service.py) ----------
+
+def update_job_service(
+    db: Session,
+    data: JobUpdate,
+    job_id: int,
+    current_user: User,
+) -> Job:
+    job = get_job(db, job_id)
+    if not job:
+        raise JobNotFoundError
+
+    update_values = data.model_dump(exclude_unset=True)
+    if not update_values:
+        raise HTTPException(status_code=400, detail="No update fields provided")
+
+    is_admin = current_user.role == UserRole.ADMIN
+    is_owner = current_user.id == job.posted_by
+
+    # Only admins, or the recruiter who created THIS job, can update it.
+    if not (is_admin or is_owner):
+        raise NotAdminError
+
+    updated_job = update_job_db(db, job_id, data)
+    if not updated_job:
+        raise JobNotFoundError
+
+    return updated_job
